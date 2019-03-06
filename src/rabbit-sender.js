@@ -17,6 +17,6 @@ module.exports = async function (messages) {
 async function processMessages(messages, channel){
     for (const position in messages) {
         var message = JSON.stringify(messages[position])
-        await channel.publish(exchange, routingkey, Buffer.from(message));
+        channel.publish(exchange, routingkey, Buffer.from(message));
     }
 }
