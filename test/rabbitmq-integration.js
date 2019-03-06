@@ -10,8 +10,6 @@ describe('Array', function () {
 });
 
 
-
-
 describe('Integration Tests', function () {
     describe('Sends message to rabbit', function () {
         it('should post a log to rabbit, i be flaky', (done) => {
