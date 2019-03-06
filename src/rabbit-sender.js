@@ -25,11 +25,9 @@ async function logToRabbit(messages) {
     await connection.close();
 }
 
-
-
 async function publishMessages(messages, channel) {
     for (const position in messages) {
-        var message = JSON.stringify(messages[position]);
+        let message = JSON.stringify(messages[position]);
         channel.publish(exchangename, routingkey, Buffer.from(message));
     }
 }

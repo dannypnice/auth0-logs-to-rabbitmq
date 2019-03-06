@@ -1,4 +1,4 @@
-var config = require('./config.js')
+var config = require('../config/dev.js')
 var rabbitsender = require('./rabbit-sender.js')(config);
 
 
