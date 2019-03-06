@@ -1,4 +1,5 @@
-var rabbitsender = require ('./rabbit-sender.js')
+var config = require('./config.js')
+var rabbitsender = require('./rabbit-sender.js')(config);
 
 
 var messages = [{"Message1":"Test"}, 'Hello World!', 'Hello World2!'];

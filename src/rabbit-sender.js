@@ -1,24 +1,35 @@
-const config = require('./config.js');
 const amqp = require('amqplib');
 
-let exchange = config.exchange.name;
-let routingkey = config.exchange.routingkey;
-let exchangetype = config.exchange.type;
-let exchangedurability = config.exchange.durability;
-let uriconfig = config.uri;
+let exchangename;
+let routingkey;
+let exchangetype;
+let exchangedurability;
+let uriconfig;
 
-module.exports = async function (messages) {
-    const connection = await amqp.connect(uriconfig);
-    const channel = await connection.createChannel();
-    await channel.assertExchange(exchange, exchangetype, { durable: exchangedurability });
-    await processMessages(messages, channel);
-    await channel.close();
-    await connection.close()
+module.exports = function (config) {
+    exchangename = config.exchange.name;
+    routingkey = config.exchange.routingkey;
+    exchangetype = config.exchange.type;
+    exchangedurability = config.exchange.durability;
+    uriconfig = config.uri;
+
+    return logToRabbit;
 }
 
-async function processMessages(messages, channel) {
+async function logToRabbit(messages) {
+    const connection = await amqp.connect(uriconfig);
+    const channel = await connection.createChannel();
+    await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
+    await publishMessages(messages, channel);
+    await channel.close();
+    await connection.close();
+}
+
+
+
+async function publishMessages(messages, channel) {
     for (const position in messages) {
-        var message = JSON.stringify(messages[position])
-        channel.publish(exchange, routingkey, Buffer.from(message));
+        var message = JSON.stringify(messages[position]);
+        channel.publish(exchangename, routingkey, Buffer.from(message));
     }
 }
