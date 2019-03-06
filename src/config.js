@@ -1,5 +1,5 @@
 module.exports = {
-    uriconfig: {
+    uri: {
         hostname: process.env.RABBITMQ_URI_HOSTNAME || "localhost",
         protocol: process.env.RABBITMQ_URI_PROTOCOL || "amqp",
         port: process.env.RABBITMQ_URI_PORT || 5672,
@@ -10,6 +10,10 @@ module.exports = {
         heartbeat: process.env.RABBITMQ_URI_HEARTBEAT || 0,
         vhost: process.env.RABBITMQ_URI_VHOST || "/",
     },
-    exchange: process.env.RABBITMQ_URI_EXCHANGE || "amq.direct",
-    routingkey: process.env.RABBITMQ_URI_ROUTINGKEY || ""
+    exchange: {
+        name: process.env.RABBITMQ_EXCHANGE_NAME || "amq.direct",
+        routingkey: process.env.RABBITMQ_EXCHANGE_ROUTINGKEY || "",
+        type: process.env.RABBITMQ_EXCHANGE_TYPE || 'direct',
+        durability: process.env.RABBITMQ_EXCHANGE_DURABILITY || 'true',
+    }
 }
