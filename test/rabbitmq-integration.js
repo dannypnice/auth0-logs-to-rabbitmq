@@ -1,13 +1,13 @@
 var assert = require('assert');
-var config = require('../config/dev.js')
+var config = require('../config/rabbit-dev.js')
 var rabbitsender = require('../src/rabbit-sender.js')(config);
-describe('Array', function () {
-    describe('#indexOf()', function () {
-        it('should return -1 when the value is not present', function () {
-            assert.equal([1, 2, 3].indexOf(4), -1);
-        });
-    });
-});
+// describe('Array', function () {
+//     describe('#indexOf()', function () {
+//         it('should return -1 when the value is not present', function () {
+//             assert.equal([1, 2, 3].indexOf(4), -1);
+//         });
+//     });
+// });
 
 
 describe('Integration Tests', function () {
@@ -17,7 +17,7 @@ describe('Integration Tests', function () {
             rabbitsender(messages)
             .then(function () { return console.log("success") })
             .then(assert.ok(true))
-            .then(function(){done()})
+            .then(done())
         });
     });
 });

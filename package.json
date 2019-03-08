@@ -2,7 +2,7 @@
   "name": "auth0-rabbitmq-logging",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/rabbit-sender.js",
   "directories": {
     "test": "test"
   },
@@ -23,6 +23,7 @@
     "mocha": "^6.0.2"
   },
   "dependencies": {
-    "amqplib": "^0.5.3"
+    "amqplib": "^0.5.3",
+    "request": "^2.88.0"
   }
 }
