@@ -23,6 +23,7 @@ async function logToRabbit(messages) {
     await publishMessages(messages, channel);
     await channel.close();
     await connection.close();
+    return messages;
 }
 
 async function publishMessages(messages, channel) {
