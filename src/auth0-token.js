@@ -20,7 +20,6 @@ module.exports = function (clientdetails) {
         }
     };
     return new Promise(function (resolve, reject) {
-        console.log(options);
         let response = '';
         var req = https.request(options, (res) => {
             res
