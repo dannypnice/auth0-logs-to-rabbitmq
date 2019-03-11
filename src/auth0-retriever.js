@@ -1,26 +1,42 @@
-var request = require("request");
+var https = require('https');
 var getToken = require("./auth0-token.js");
 
-function requestLog(token) {
-      
-    var options = {
-        method: 'GET',
-        url: 'https://slummock.eu.auth0.com/api/v2/logs',
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        },
-        json: true,
-        qs: {
-            from: '90020190307161110316936377421990542364809456317487906818'
-        }
-    };
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
+module.exports = function (clientdetails) {
+    _clientdetails = clientdetails;
+    return requestLogs;
 }
 
 
-getToken.then(token => requestLog(token));
+function requestLogs(token) {
+    return new Promise(function (resolve, reject) {
+        var options = {
+            hostname: _clientdetails.url,
+            port: 443,
+            path: '/api/v2/logs?' + 'from=90020190307161110316936377421990542364809456317487906818',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        };
+
+        var req = https.request(options, (res) => {
+            let response = '';
+            res
+                .on('data', (d) => {
+                    response += d;
+                })
+                .on('end', () => {
+                    var responseObject = JSON.parse(response);
+                    resolve(responseObject);
+                });
+        })
+
+        req.on('error', (error) => {
+            console.error(error);
+            reject(error)
+        });
+
+        req.end();
+    })
+}

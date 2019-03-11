@@ -23,7 +23,6 @@
     "mocha": "^6.0.2"
   },
   "dependencies": {
-    "amqplib": "^0.5.3",
-    "request": "^2.88.0"
+    "amqplib": "^0.5.3"
   }
 }
