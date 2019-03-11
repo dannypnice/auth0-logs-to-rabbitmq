@@ -1,15 +1,15 @@
-var https = require('https');
+const https = require('https');
 
 module.exports = function (clientdetails) {
 
-    var postData = JSON.stringify({
+    let postData = JSON.stringify({
         grant_type: 'client_credentials',
         client_id: clientdetails.id,
         client_secret: clientdetails.secret,
         audience: 'https://' + clientdetails.url + '/api/v2/'
     });
 
-    var options = {
+    let options = {
         hostname: clientdetails.url,
         port: 443,
         path: '/oauth/token',
@@ -21,14 +21,19 @@ module.exports = function (clientdetails) {
     };
     return new Promise(function (resolve, reject) {
         let response = '';
-        var req = https.request(options, (res) => {
+        let req = https.request(options, (res) => {
             res
                 .on('data', (d) => {
                     response += d;
                 })
                 .on('end', () => {
-                    var responseObject = JSON.parse(response);
-                    resolve(responseObject.access_token);
+                    if (res.statusCode != 200) {
+                        reject("Token response was not 200, response was: " + response)
+                    }
+                    else {
+                        let responseObject = JSON.parse(response);
+                        resolve(responseObject.access_token);
+                    }
                 });
         });
 
