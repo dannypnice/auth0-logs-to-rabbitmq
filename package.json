@@ -1,13 +1,13 @@
 {
   "name": "auth0-logs-to-rabbitmq",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "This extension will continuously export your Auth0 logs to RabbitMQ",
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && npm run client:build && npm run extension:build",
     "clean": "rimraf dist",
     "client:build": "npm run clean && cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
-    "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-logs-to-rabbitmq.extension.$npm_package_version.js ./build/bundle.js",
+    "extension:build": "cross-env-shell \"a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-logs-to-rabbitmq.extension.$npm_package_version.js ./build/bundle.js\"",
     "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack .",
     "serve:dev": "cross-env NODE_ENV=development gulp run --gulpfile ./build/gulpfile.js",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
@@ -66,6 +66,7 @@
     ]
   },
   "dependencies": {
+    "amqplib": "^0.5.3",
     "async": "^1.5.2",
     "auth0": "^2.4.0",
     "auth0-extension-express-tools": "1.1.7",
@@ -123,7 +124,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "chai": "^3.5.0",
     "classnames": "^2.2.5",
-    "cross-env": "^3.1.2",
+    "cross-env": "^5.2.0",
     "css-loader": "^0.25.0",
     "eslint": "^3.3.1",
     "eslint-config-auth0": "^6.0.1",
@@ -162,12 +163,12 @@
     "rimraf": "^2.5.2",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.1",
+    "webpack": "^1.15.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.10.0",
     "webpack-sources": "^0.1.2",
-    "webpack-stats-plugin": "^0.1.1",
+    "webpack-stats-plugin": "^0.1.5",
     "webtask-bundle": "^2.1.1"
   },
   "snyk": true

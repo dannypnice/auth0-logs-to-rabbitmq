@@ -35,9 +35,9 @@ module.exports = (storage) =>
         let routingkey = config('RABBITMQ_ROUTINGKEY');
         let exchangetype = config('RABBITMQ_EXCHANGE_TYPE');
         let exchangedurability = config('RABBITMQ_EXCHANGE_DURABILITY');
-        const connection = await amqp.connect(uriconfig);
+        const connection = amqp.connect(uriconfig);
 
-        const sendLog = async function (log, callback) {
+        const sendLog = function (log, callback) {
             if (!log) {
                 return callback();
             }
@@ -53,10 +53,11 @@ module.exports = (storage) =>
 
             data.message = JSON.stringify(log);
 
-            let channel = await connection.createChannel();
-            await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
-            await channel.publish(exchangename, routingkey, Buffer.from(message));
-            await channel.close();
+            let channel = connection.createChannel()
+                .then(() => { channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability }) })
+                .then(() => { channel.publish(exchangename, routingkey, Buffer.from(message)) })
+                .then(() => { channel.close() })
+                .then(() => { callback() })
         };
 
 
