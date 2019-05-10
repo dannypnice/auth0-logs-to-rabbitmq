@@ -53,7 +53,7 @@ module.exports = (storage) =>
 
             data.message = JSON.stringify(log);
 
-            channel = await connection.createChannel();
+            let channel = await connection.createChannel();
             await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
             await channel.publish(exchangename, routingkey, Buffer.from(message));
             await channel.close();
