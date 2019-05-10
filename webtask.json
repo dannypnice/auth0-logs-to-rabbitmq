@@ -61,11 +61,17 @@
     "RABBITMQ_URI_VHOST": {
       "description": "RabbitMQ vhost"
     },
-    "RABBITMQ_URI_EXCHANGE": {
+    "RABBITMQ_EXCHANGE_NAME": {
       "description": "RabbitMQ exchange"
     },
-    "RABBITMQ_URI_ROUTINGKEY": {
+    "RABBITMQ_ROUTINGKEY": {
       "description": "RabbitMQ routing key"
+    },
+    "RABBITMQ_EXCHANGE_TYPE":{
+      "description": "RabbitMQ Exchange Type"
+    },
+    "RABBITMQ_EXCHANGE_DURABILITY":{
+      "description": "RabbitMQ Exchange Durability"
     },
     "START_FROM": {
       "description": "Checkpoint ID of log to start from."
