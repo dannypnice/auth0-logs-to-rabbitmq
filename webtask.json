@@ -10,7 +10,6 @@
   "initialUrlPath": "/login",
   "repository": "https://github.com/dannypnice/auth0-logs-to-rabbitmq",
   "docsUrl": "https://github.com/dannypnice/auth0-logs-to-rabbitmq",
-  "logoUrl": "",
   "keywords": [
     "auth0",
     "extension",
