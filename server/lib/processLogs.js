@@ -35,6 +35,7 @@ module.exports = (storage) =>
         let routingkey = config('RABBITMQ_ROUTINGKEY');
         let exchangetype = config('RABBITMQ_EXCHANGE_TYPE');
         let exchangedurability = config('RABBITMQ_EXCHANGE_DURABILITY');
+        const connection = await amqp.connect(uriconfig);
 
         const sendLog = async function (log, callback) {
             if (!log) {
@@ -52,12 +53,10 @@ module.exports = (storage) =>
 
             data.message = JSON.stringify(log);
 
-            const connection = await amqp.connect(uriconfig);
-            const channel = await connection.createChannel();
+            channel = await connection.createChannel();
             await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
             await channel.publish(exchangename, routingkey, Buffer.from(message));
             await channel.close();
-            await connection.close();
         };
 
 
@@ -70,8 +69,6 @@ module.exports = (storage) =>
 
             async.eachLimit(logs, 10, sendLog, callback);
         };
-
-        const slack = new loggingTools.reporters.SlackReporter({ hook: config('SLACK_INCOMING_WEBHOOK_URL'), username: 'auth0-logs-to-rabbitmq', title: 'Logs To RabbitMQ' });
 
         const options = {
             domain: config('AUTH0_DOMAIN'),
@@ -99,7 +96,6 @@ module.exports = (storage) =>
             const end = current.getTime();
             const start = end - 86400000;
             auth0logger.getReport(start, end)
-                .then(report => slack.send(report, report.checkpoint))
                 .then(() => storage.read())
                 .then((data) => {
                     data.lastReportDate = lastReportDate;
@@ -122,17 +118,12 @@ module.exports = (storage) =>
         return auth0logger
             .run(onLogsReceived)
             .then(result => {
-                if (result && result.status && result.status.error) {
-                    slack.send(result.status, result.checkpoint);
-                } else if (config('SLACK_SEND_SUCCESS') === true || config('SLACK_SEND_SUCCESS') === 'true') {
-                    slack.send(result.status, result.checkpoint);
-                }
                 checkReportTime();
                 res.json(result);
             })
             .catch(err => {
-                slack.send({ error: err, logsProcessed: 0 }, null);
                 checkReportTime();
                 next(err);
-            });
+            })
+            .then(() => { connection.close() });
     };
