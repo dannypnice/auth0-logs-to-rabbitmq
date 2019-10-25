@@ -15,9 +15,10 @@ describe('Integration Tests', function () {
         it('should post a log to rabbit, i be flaky', (done) => {
             var messages = [{ "Message1": "Test" }, 'Hello World!', 'Hello World2!'];
             rabbitsender(messages)
-            .then(function () { return console.log("success") })
-            .then(assert.ok(true))
-            .then(done())
+            .then(function(result){
+                assert.equal(messages, result)
+                done()
+            });
         });
     });
 });

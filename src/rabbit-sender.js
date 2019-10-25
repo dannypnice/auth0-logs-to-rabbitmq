@@ -17,13 +17,22 @@ module.exports = function (config) {
 }
 
 async function logToRabbit(messages) {
-    const connection = await amqp.connect(uriconfig);
-    const channel = await connection.createChannel();
-    await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
-    await publishMessages(messages, channel);
-    await channel.close();
-    await connection.close();
-    return messages;
+    try {
+        const connection = await amqp.connect(uriconfig);
+        const channel = await connection.createChannel();
+        await channel.assertExchange(exchangename, exchangetype, { durable: exchangedurability });
+        await publishMessages(messages, channel);
+        await channel.close();
+        await connection.close();
+        return messages;
+    }
+    catch (exception) {
+        console.log(exception)
+    }
+    finally {
+        await channel.close();
+        await connection.close();
+    }
 }
 
 async function publishMessages(messages, channel) {

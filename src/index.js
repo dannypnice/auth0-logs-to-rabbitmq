@@ -1,6 +1,7 @@
 const rabbitconfig = require('../config/rabbit-dev.js')
 const clientdetails = require('../localscripts/personal-client-details.js')
 
+const logcheckpoint = require('./file-logcheckpoint');
 const auth0Retriever = require('./auth0-retriever.js')(clientdetails)
 const auth0Token = require('./auth0-token.js')(clientdetails)
 const rabbitsender = require('./rabbit-sender.js')(rabbitconfig);
@@ -14,3 +15,5 @@ auth0Token
     .catch(function (error) {
         console.log(error);
     })
+
+logcheckpoint.getCheckpoint("./src/filecheckpoint")
