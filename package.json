@@ -97,7 +97,7 @@
     "jwt-decode": "^2.1.0",
     "lodash": "3.10.1",
     "lru-memoizer": "^1.6.0",
-    "moment": "^2.13.0",
+    "moment": "^2.29.2",
     "morgan": "^1.7.0",
     "nconf": "^0.8.4",
     "qs": "^6.4.0",
